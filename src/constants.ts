@@ -2,6 +2,8 @@ export const SERVER_NAME = "PersonalMemoryServer";
 export const SERVER_VERSION = "1.0.0";
 export const STORAGE_FILE_PATH =
   "C:\\Users\\farha\\Desktop\\work\\projects\\_mini-pj\\personal-memory-mcp\\storage\\notes.json";
+export const SQLITE_DB_PATH =
+  "C:\\Users\\farha\\Desktop\\work\\projects\\_mini-pj\\personal-memory-mcp\\storage\\notes.db";
 
 export const MESSAGES = {
   NO_NOTES_FOUND: "No matching notes found.",

@@ -1,10 +1,14 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { MESSAGES, SERVER_NAME, SERVER_VERSION } from "./constants";
-import { createNoteStorage } from "./storage";
+import { StorageType, createNoteStorage } from "./storage";
+import { NoteStorage, StorageOptions } from "./types";
 
-export async function createServer(): Promise<McpServer> {
-  const storage = createNoteStorage();
+export async function createServer(
+  storageType: StorageType = StorageType.FILE,
+  options?: StorageOptions
+): Promise<McpServer> {
+  const storage: NoteStorage = createNoteStorage(storageType, options);
   await storage.initialize();
 
   const server = new McpServer({
@@ -48,6 +52,25 @@ export async function createServer(): Promise<McpServer> {
         {
           type: "text",
           text: JSON.stringify(matches, null, 2),
+        },
+      ],
+    };
+  });
+
+  server.tool("get_all_notes", {}, async () => {
+    const allNotes = storage.getAllNotes();
+
+    if (allNotes.length === 0) {
+      return {
+        content: [{ type: "text", text: MESSAGES.NO_NOTES_FOUND }],
+      };
+    }
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(allNotes, null, 2),
         },
       ],
     };
